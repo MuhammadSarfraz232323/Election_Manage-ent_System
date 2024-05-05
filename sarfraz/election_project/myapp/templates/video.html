@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch a video ! how to cast ?</title>
+</head>
+<body>
+    <table width='100%'>
+        <tr height='100px'>
+            <th style='background-color: rgba(16, 143, 69, 0.694); border-radius: 40px; font-size: 30px;' colspan='7'>
+                Watch a video how to cast your vote 
+            </th>
+
+        </tr>
+        <tr height='70px'>
+        </tr>
+        <tr>
+            <th>
+                {% for x in object %}
+                    <video width='700px' controls='controls' style='border-radius: 30px;'>
+                    <source  src='{{x.video.url}}' ></video>
+                {% endfor %}    
+            </th>
+        </tr>
+    </table>
+</body>
+</html>

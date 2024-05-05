@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mannual Result Checking </title>
+</head>
+<body style='background-color:  rgb(0, 90, 72);'>
+    <table width='100%'>
+        <tr height='70px'>
+            <th colspan='4' style='background-color: rgb(10, 114, 115);'>Enter the of party to check the result</th>
+        </tr>
+        <tr height='70px'>
+        </tr>
+        <tr>
+            <th>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <input type='submit' value='Check' style='background-color: orange; border-radius: 20px;'>
+                </form>
+            </th>
+        </tr>
+    </table>
+</body>
+</html>

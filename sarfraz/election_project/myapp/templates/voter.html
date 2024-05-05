@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel Election Commission Of Pakistan </title>
+    <style>
+        .menu >ul{
+            background: goldenrod;
+        }
+        .menu ul li{
+            list-style: none;
+            font-size: 20px;
+            padding-left: 70px;
+            background: orange;
+            float: left;
+        }
+        .menu ul li:hover{
+            background: blue;
+        }
+        .menu ul {
+            position: fixed;
+        }
+        .menu ul ul li{
+            font-size: 17px;
+            list-style: none;
+            font-weight:bold;
+            display: none;
+            padding-left: 10px;
+            border: 2px ;
+        }
+        .menu ul li:hover ul li{
+            display: block;
+        }
+        .menu ul ul li:hover{
+            background: grey;
+            border-left: 2px solid red;
+        }
+
+    </style>
+</head>
+<body style='background-color: rgba(22, 119, 90, 0.661);'>
+    <div class='menu'>
+    <ul>
+        <li>Results
+            <ul>
+                <li><a href='complete_data/'>Complete Results</a></li><br>
+        </li>
+    </ul>
+    <li><a href='main_admin/'>Main Admin</a></li>
+    <li><a href='check_registration/'>Registrations</a></li>
+
+    </div>
+    <table width='100%'>
+        <tr height='100px'>
+            <th style='background-color: rgba(18, 154, 72, 0.533); border-radius: 40px;' colspan='4'><br><br>
+                Admin Panel Election Commission Of Pakistan 
+            </th>
+        </tr>
+        <tr height='100px'>
+            <th colspan='4'>
+                Organize a new Election by providing following data 
+            </th>
+        </tr>
+        <tr>
+            <th width='300px'>
+            </th>
+            <th style=' border-radius: 40px; background-color:  rgba(18, 154, 72, 0.533);'>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type='submit' value='Upload ' style='background-color: rgba(139, 116, 11, 0.785); border-radius: 40px;'>
+                </form>
+            </th>
+            <th width='300px'>
+            </th>
+        </tr>
+    </table>
+    
+</body>
+</html>

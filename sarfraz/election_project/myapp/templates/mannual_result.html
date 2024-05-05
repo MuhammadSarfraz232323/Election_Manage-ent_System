@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mannual Result Checking</title>
+</head>
+<body>
+    <table width='100%'>
+        <tr height='70px'>
+            <th style='background-color: rgb(14, 135, 61);'>
+                Mannual Results Of Election 
+            </th>
+        </tr>
+            <tr>
+            <th>Name</th>
+            <th>Father_name</th>
+            <th>Phone_number</th>
+            <th>Password</th>
+            <th>Party</th>
+            <th>CNIC</th>
+        </tr>
+        {% for x in object %}
+        <tr>
+            <th>{{x.name}}</th>
+            <th>{{x.father_name}}</th>
+            <th>{{x.phone_number}}</th>
+            <th>{{x.password}}</th>
+            <th>{{x.party}}</th>
+            <th>{{x.id_no}}</th>
+        </tr>
+        {% endfor %}
+
+        </table>
+    </table>
+    
+</body>
+</html>

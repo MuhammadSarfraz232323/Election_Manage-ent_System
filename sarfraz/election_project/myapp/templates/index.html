@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Manangment System Of Pakistan </title>
+    <style>
+        .sarfraz > ul {
+            background-color: orange;
+        }
+        .sarfraz ul{
+            position: fixed;
+            list-style: none;
+            padding-left: 90px;
+        }
+        .sarfraz ul li:hover{
+            list-style: none;
+            background:grey;
+            border-radius: 2px ;
+        }
+        .sarfraz ul ul li{
+            list-style: none;
+            font-size: 17px;
+            display: none;
+            border: 4px;
+        }
+        .sarfraz ul li:hover ul li{
+            display: block;
+        }
+        .sarfraz ul ul li:hover{
+            background: grey;
+            border-left: 4px solid red;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body style='background-color: rgb(0, 90, 72);'>
+    <div class='sarfraz'>
+    <ul>
+        <li>
+            Panel options
+              <ul>
+                  <li><a href='contact/'>Contact us</a></li>
+                    <li><a href='watch_video/'>Watch a video</a></li>
+                        <li><a href='login_verification/'>Admin Panel </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <table width='100%'>
+            <tr height='100px'>
+                <th style='background-color: #08352c; border-radius: 40px; font-size:24px; color: cornflowerblue;'>
+                    Election Management System Of Pakistan 
+                </th>
+            </tr>
+        </table>
+        {% include "header.html" %}
+</table>
+</marquee>
+<br><br><br>
+    <table width='100%'>
+        <tr height='100px'>
+            <th style='font-size:18px; color:  cornflowerblue;' colspan='10'>
+                Welcome TO (ECP) Please follow the steps <br> to cast your precious vote 
+            </th>
+        </tr>
+        <tr>
+            <th width='130px'>
+            </th>
+            <th style='border-radius: 40px; background-color:#08352c;' colspan='7'>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type='submit' value='Signup' style='background-color: orange; border-radius: 20px;'>
+                </form><br><br><br>
+                Already have an Account <a href='login/' style='color: rgb(111, 113, 12);'>Login</a>
+            </th>
+            <th width='130px'>
+            </th>
+        </tr>
+        <tr height='100px'></tr>
+        {% include "footer.html" %}
+    
+</body>
+</html>

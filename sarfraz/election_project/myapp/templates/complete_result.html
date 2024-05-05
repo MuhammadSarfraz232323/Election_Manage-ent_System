@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Results</title>
+</head>
+<body>
+    <table width='100%'>
+        <tr height='100px'>
+            <th style='background-color: #08352c; border-radius: 30px; color:cornflowerblue ;' colspan='7'>
+                Election Results of Pakistan
+            </th>
+        </tr>
+        <tr height='40px'>
+        </tr>
+        </table>
+            <table width='100%%' border='1'>
+        <tr style='background-color: orange;' height='70px'>
+            <th>Name</th>
+            <th>Father_name</th>
+            <th>Phone_number</th>
+            <th>Password</th>
+            <th>Party</th>
+            <th>CNIC</th>
+        </tr>
+            {% for x in object %}
+            <tr>
+                  <th>{{x.name}}</th>
+                  <th>{{x.father_name}}</th>
+                  <th>{{x.phone_number}}</th>
+                  <th>{{x.password}}</th>
+                  <th>{{x.party}}</th>
+                  <th>{{x.id_no}}</th>
+            </tr>
+            {% endfor %}
+    </table>
+</body>
+</html>

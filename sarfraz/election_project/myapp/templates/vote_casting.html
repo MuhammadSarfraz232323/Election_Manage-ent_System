@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote casting page </title>
+    <style>
+        .menu >ul {
+            position: fixed;
+        }
+        .menu ul li{
+            border-radius: 10px;
+            list-style: none;
+            padding-left: 90px;
+            background-color: orange;
+        }
+
+        </style>
+</head>
+<body style='background-color: rgba(2, 163, 29, 0.611);'>
+    <div class='menu'>
+    <ul>
+        <li>
+            <a href='send_detail/'>Request For detail</a> 
+        </li>
+    </ul>
+    </div>
+    <table width='100%'>
+        <tr height='40px'></tr>
+        <tr>
+            <th style='background-color: grey; border-radius: 40px;' height='70px'>
+                Vote casting page (ECP)
+            </th>
+        </tr>
+        <tr height='100px'>
+        </tr>
+        <tr>
+            <th>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <input type='submit' value='Cast' style='background-color: rgb(187, 135, 40);'>
+                </form>
+            </th>
+        </tr>
+    </table>
+
+    
+</body>
+</html>
