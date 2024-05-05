@@ -102,3 +102,19 @@ class Request(forms.Form):
     id_no=forms.CharField(label='',widget=forms.TextInput(attrs={
         "placeholder":"Enter your CNIC number "
     }))    
+class main_user(forms.Form):
+    username=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your name "
+    }))    
+    email=forms.EmailField(label='',widget=forms.EmailInput(attrs={
+        "placeholder":"Enter your Email Adress"    
+    }))
+    first_name=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your first name "
+    }))
+    last_name=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your last name "
+    }))
+    password=forms.CharField(label='',widget=forms.PasswordInput(attrs={
+        "placeholder":"Enter your password "
+    }))

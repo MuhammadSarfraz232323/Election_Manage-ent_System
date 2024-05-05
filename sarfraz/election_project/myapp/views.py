@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from myapp.form import Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration
+from myapp.form import main_user,Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration
 from django.http import HttpResponse
 from election_project import settings
 from django.contrib.auth.models import User
@@ -351,3 +351,18 @@ def detail(request):
 
 def double_verification(request):
     return HttpResponse("<h1 align='center'>You are already on the required page </h1>")
+
+
+def main_user_create(request):
+    form=main_user()
+    if request.method=="POST":
+        form=main_user(request.POST)
+        if form.is_valid():
+            User.objects.create(**form.cleaned_data)
+            return HttpResponse("<h1 align='center'>A new user created successfully  !!!!!!!</h1>")
+        else:
+            print(form.errors)
+    context={
+        "form":form
+    }            
+    return render(request,'main_user.html',context)

@@ -17,7 +17,8 @@ from myapp.views import(
     verify_registration,
     check_registration,
     detail,
-    double_verification
+    double_verification,
+    main_user_create
     )
 urlpatterns = [
     path('ECP/',homepage),
@@ -41,6 +42,7 @@ urlpatterns = [
     path('login/main_portal/cast_vote/send_detail/',detail),
     path('login/send_detail/',detail),
     path('login_verification/Admin/',voter),
+    path('login_verification/Admin/user_create/',main_user_create),
     path('login_verification/Admin/check_registration/',check_registration),
     path('login_verification/',create_user)
 ]
