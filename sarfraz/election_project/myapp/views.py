@@ -493,4 +493,10 @@ def video_function(request):
     context={
         "form":form
     }        
-    return render(request,'video_upload.html',context) 
+    return render(request,'video_upload.html',context)
+def general_election(request):
+    return render(request,'general_election.html')    
+
+
+
+

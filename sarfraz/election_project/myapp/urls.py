@@ -25,7 +25,8 @@ from myapp.views import(
     vote,
     home_id,
     introduction,
-    video_function
+    video_function,
+    general_election
     )
 urlpatterns = [
     path('ECP/',homepage),
@@ -53,8 +54,7 @@ urlpatterns = [
     path('login_verification/Admin/user_create/',main_user_create),
     path('login_verification/Admin/check_registration/',check_registration),
     path('login_verification/',create_user),
-
-    #These are the urls for the api to test the conduction of data between user and server 
+    path('general_election/',general_election),
     path('home/',Home_api),
     path('home/<int:id>/',home_id),
     path('party/<int:id>/',party),
