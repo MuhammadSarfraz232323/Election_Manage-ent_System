@@ -23,6 +23,7 @@ from myapp import views
 urlpatterns = [
     path('',views.homepage),
     path('login_verification/Admin/main_admin/', admin.site.urls),
-    path('',include('myapp.urls'))
+    path('',include('myapp.urls')),
+    path('api-auth/',include('rest_framework.urls'))
 ]
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -18,13 +18,13 @@
             </th>
         </tr>
         <tr style='background-color: orange;' height='40px'>
-            <th>Part Flag</th><th>Party Name</th><th>Party Symbol</th><th>Candidate Name</th><th>Vote Status<th>
+            <th>Part Flag</th><th>Party Name</th><th>Party Symbol</th><th>Candidate Photo</th><th>Candidate Name</th><th>Vote Status<th>
         </tr>
         <tr height='70px'>
         </tr>
         <tr>
             {% for x in object %}
-                <th colspan='1'><img src='{{ x.party_flag.url }}' width='100px' height='100px' style='border-radius: 20px;'></th><th colspan='1'>{{x.party_name}}</th> <th colspan='1'><img src='{{ x.party_symbol.url }}' width='100px' height='100px' style='border-radius: 30px;'></th> <th colspan='1'>{{x.candidate_name}}</th> <th colspan='1'><a  href='cast_vote/'>Cast Your Vote </th>
+                <th colspan='1'><img src='{{ x.party_flag.url }}' width='100px' height='100px' style='border-radius: 20px;'></th><th colspan='1'>{{x.party_name}}</th> <th colspan='1'><img src='{{ x.party_symbol.url }}' width='100px' height='100px' style='border-radius: 30px;'></th> <th><img src='{{x.image.url}}' width='100px' height='100px' style='border-radius:30px;'></th><th colspan='1'>{{x.candidate_name}}</th> <th colspan='1'><a  href='cast_vote/'>Cast Your Vote </th>
                 </tr>
                 <tr height='100px'></tr>
 

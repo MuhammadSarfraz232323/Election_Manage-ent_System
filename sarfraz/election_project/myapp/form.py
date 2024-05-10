@@ -50,6 +50,9 @@ class Voterf(forms.Form):
     party_flag=forms.ImageField(label='Upload the party Flag Image ',widget=forms.ClearableFileInput(attrs={
         "class":"form-control "
     }))
+    image=forms.ImageField(label='Upload image of candidate',widget=forms.ClearableFileInput(attrs={
+        "class":"form-control"
+    }))
     party_symbol=forms.ImageField(label='Upload the Image of Party Symbol ',widget=forms.ClearableFileInput(attrs={
         "class":"form-control "
     }))
@@ -117,4 +120,8 @@ class main_user(forms.Form):
     }))
     password=forms.CharField(label='',widget=forms.PasswordInput(attrs={
         "placeholder":"Enter your password "
+    }))
+class My_video(forms.Form):
+    video=forms.FileField(label='',widget=forms.ClearableFileInput(attrs={
+        "class":"form-control"
     }))

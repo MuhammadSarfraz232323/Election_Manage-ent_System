@@ -1,20 +1,136 @@
 from django.shortcuts import render,redirect
-from myapp.form import main_user,Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration
+from myapp.form import main_user,Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration,My_video
 from django.http import HttpResponse
 from election_project import settings
 from django.contrib.auth.models import User
-from myapp.models import Home,Election_introduction,Video,Vote_casting
-from django.contrib import messages
+from myapp.models import Home,Election_introduction,Video,Vote_casting,Party1,Video
+from  django.contrib import messages
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail,EmailMultiAlternatives
 from django.contrib.auth import authenticate,login
 import random
-# Create your views here.
+from myapp.serializers import Homeserializer,Partyserializer,Main_serializer,Vote_serializer,Introduction_serializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status,serializers,generics
+
+# we are now creating different apis to test the functionalit of ours models 
+
+
+# ----------------------------------------------------  for home table 
+@api_view(['post','DELETE'])
+def introduction(request):
+    sarfraz=Election_introduction.objects.all()
+    if request.method=="POST":
+        my_serializer=Introduction_serializer(data=request.data)
+        if my_serializer.is_valid():
+            my_serializer.save()
+            return Response(my_serailizer.data,status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_bad_request)
+    elif request.method=="DELETE":
+        sarfraz.delete()
+        return Response(status=status.HTTP_200_OK)            
+
+@api_view(['GET','POST','DELETE'])  
+def Home_api(request):
+    sarfraz=Home.objects.all()
+    if request.method=="POST":
+        my_dataz=Home.objects.all()
+        my_serializer=Homeserializer(data=request.data)
+        if my_serializer.is_valid():
+            my_serializer.save()
+            return Response(my_serializer.data,status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)    
+
+    elif request.method == "GET":
+        my_serializer=Homeserializer(sarfraz,many=True)
+        return Response(my_serializer.data) 
+    elif request.method=='DELETE':
+        sarfraz.delete()
+        return Response(status=status.HTTP_200_OK)      
+
+@api_view(['GET','PATCH','DELETE'])
+def home_id(request,id):
+    sarfraz=Home.objects.get(pk=id)
+    if request.method=="GET":
+        my_serializer=Homeserializer(sarfraz)
+        return Response(my_serializer.data,status=status.HTTP_200_OK)   
+
+    elif request.method=="PATCH":
+        sarfraz.name=request.data.get('name',sarfraz.name)
+        sarfraz.father_name=request.data.get('father_name',sarfraz.father_name) 
+        sarfraz.id_no=request.data.get('id_no',sarfraz.id_no)
+        sarfraz.phone_number=request.data.get('phone_number',sarfraz.phone_number),       
+        sarfraz.email_adress=request.data.get('email_adress',sarfraz.email_adress)
+        sarfraz.password=request.data.get('password',sarfraz.password)
+        sarfraz.save()
+        my_serializer=Homeserializer(sarfraz)
+        return Response(my_serializer.data,status=status.HTTP_200_OK)
+    elif request.method=="DELETE":
+        sarfraz.delete()
+        return Response(status=status.HTTP_200_OK)    
+# -------------------------------------------------------      for party table       
+
+@api_view(['PUT','PATCH','GET'])  
+def party(request,id):
+    sarfraz=Party1.objects.get(pk=id)
+    if request.method=="PUT":
+        my_serializer=Partyserializer(sarfraz,data=request.data)
+        if my_serializer.is_valid():
+            my_serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)    
+    elif request.method=="PATCH":
+        sarfraz.name=request.data.get('name',sarfraz.name)
+        sarfraz.father_name=request.data.get('father_name',sarfraz.father_name)
+        sarfraz.phone_number=request.data.get('phone_number',sarfraz.phone_number)
+        sarfraz.Adress=request.data.get('Adress',sarfraz.Adress)
+        sarfraz.Id_no=request.data.get('Id_no',sarfraz.Id_no)
+        sarfraz.save()
+        return Response(status=status.HTTP_201_CREATED)
+    elif request.method=="GET":
+        my_serializer=Partyserializer(sarfraz)
+        return Response(my_serializer.data,status=status.HTTP_200_OK)    
+
+@api_view(['GET','POST'])    
+def party_1(request):        
+    sarfraz=Party1.objects.all()
+    if request.method=="GET":
+        my_serializer=Partyserializer(sarfraz,many=True)
+        return Response(my_serializer.data,status=status.HTTP_200_OK)
+
+    elif request.method=="POST":
+        my_serializer=Partyserializer(data=request.data)
+        if my_serializer.is_valid():
+            my_serializer.save()
+            return Response(my_serializer.data,status=status.HTTP_201_CREATED) 
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST) 
+
+#for vote casting 
+@api_view(['POST','GET'])
+def vote(request):
+    sarfraz=Vote_casting.objects.all()
+    if request.method=="POST":
+        my_serializer=Vote_serializer(data=request.data)
+        if my_serializer.is_valid():
+            my_serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif request.method=="GET":
+        my_serializer=Vote_serializer(sarfraz,many=True)
+        return Response(my_serializer.data,status=status.HTTP_201_CREATED)        
+# Original views functions are here 
 
 import sqlite3
 connection=sqlite3.connect('db.sqlite3',check_same_thread=False)
 cursor=connection.cursor()  
+
 def empty(a,nn=0):
     for i in a:
         nn+=1
@@ -38,20 +154,18 @@ def homepage(request):
             name=request.POST['name']
             email=request.POST['email_adress']
             id_no=request.POST['id_no']
-            new_list=[]
-            query="select * from myapp_vote_casting"
+            check_list=[]
+            query="select* from myapp_home"
             cursor.execute(query)
             variable=cursor.fetchall()
             for i in variable:
-                new_list.append(i[5])
-            print(new_list)
-            if id_no in new_list:
-                return HttpResponse("<h1 align='center'>The user with thid CNIC have alraedy casted the vote,<br> Thanks for visiting us </h1>") 
+                check_list.append(i[5])
+            if id_no in check_list:
+                return HttpResponse("<h1 align='center'>The user with this ID is already registered here !! Please try to login </h1>")    
             else:    
                 otp=random.randint(100000,999999) 
                 otp_list.append(otp)
                 name_list.append(name)
-                print(name_list)
                 email_list.append(email)
                 my_subject="Account verification on ECP"
                 html_message=render_to_string('email.html',{"otp":otp})
@@ -131,15 +245,16 @@ def simple_login(request):
             name=request.POST['name']
             password=request.POST['password']
             cnic=request.POST['id_no']
-            query="select * from myapp_home "
+            query="select* from myapp_home"
             cursor.execute(query)
             variable=cursor.fetchall()
             connection.commit()
             check_list=[]
             for i in variable:
                 check_list.append(i[0])
-                check_list.append(i[2])
                 check_list.append(i[4])
+                check_list.append(i[5])
+            print(check_list)    
             if name in check_list and password in check_list and cnic in check_list:
                 query="select* from myapp_vote_casting "
                 cursor.execute(query)
@@ -150,7 +265,6 @@ def simple_login(request):
                 print(second_check)    
                 if cnic in second_check:
                     return HttpResponse("<h1 align='center'>The user with this cnic have already casted his vote. Thanks for visiting us !!</h1>")
-                    return HttpResponse("<h1 align='center'><//h1>")    
                 else:    
                     return redirect('main_portal/')
             else:
@@ -177,9 +291,9 @@ def voter(request):
                 id_no varchar(100))"""
                 cursor.execute(query)
                 connection.commit()
+                return HttpResponse("<h1 align='center'>A new party has been organized to election panel successfully </h1>")
             except:
-                return HttpResponse("<h1>There is some problem please tery again </h1>")
-            return HttpResponse("<h1 align='center'>A new party has been organized to election panel successfully </h1>")
+                return HttpResponse("<h1 align='center'>There is some problem please try again </h1>")
         else:
             print(form.errors)
     context={
@@ -314,17 +428,16 @@ def detail(request):
             cursor.execute(query)
             variable=cursor.fetchone()
             print(variable[0])
-            print(variable[4])
-            if cnic==variable[2]:
+            print(variable[5])
+            if cnic==variable[5]:
                 my_subject="Data recovery Email "
                 context={
                     "name":variable[0],
                     "father_name":variable[1],
-                    "id_no":variable[2],
-                    "phone_number":variable[3],
-                    "password":variable[4],
-                    "email":variable[5],
-                    
+                    "phone_number":variable[2],
+                    "email":variable[3],
+                    "password":variable[4], 
+                    'id_no':variable[5]                   
                 }
                 html_message=render_to_string("user_data_email.html",context)
                 plain_message=strip_tags(html_message)
@@ -333,7 +446,7 @@ def detail(request):
                     subject=my_subject,
                     from_email=None,
                     to=[
-                        variable[5]
+                        variable[3]
                         ]
                 )
                 message.attach_alternative(html_message,'text/html')
@@ -366,3 +479,18 @@ def main_user_create(request):
         "form":form
     }            
     return render(request,'main_user.html',context)
+
+
+def video_function(request):
+    form=My_video()
+    if request.method=="POST":
+        form=My_video(request.POST,request.FILES)
+        if form.is_valid():
+            Video.objects.create(**form.cleaned_data)
+            return HttpResponse("<h1 align='center'>Your video is uploaded successfully </h1>")
+        else:
+            return HttpResponse("<h1 align='center'>Failed to upload your video</h>")    
+    context={
+        "form":form
+    }        
+    return render(request,'video_upload.html',context) 

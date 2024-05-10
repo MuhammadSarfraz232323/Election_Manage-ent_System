@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload your video </title>
+</head>
+<body style='background-color: rgb(38, 146, 154)'>
+    <table width='100%'>
+        <tr style='background-color: rgba(100, 128, 0, 0.717);' height='70px'>
+            <th colspan='4' style='border-radius: 30px; font-size: 20px;'>
+                Upload your video here 
+            </th>
+        </tr>
+        <tr height='100px'>
+        </tr>
+        <tr>
+            <th>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type='submit' value='Upload' style='background-color: orange; border-radius: 20px;'>
+                </form>
+            </th>
+        </tr>
+    </table>
+
+    
+</body>
+</html>

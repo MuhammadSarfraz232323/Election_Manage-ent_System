@@ -1,0 +1,238 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "ELECTION_API'S",
+    "collectionId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+    "dateExported": "2024-05-07T18:55:50.473Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "3dd1297e-473e-4cdc-b487-d1de0c18d7ef",
+            "name": "HOME_TABLE (overall_data)",
+            "containerId": "",
+            "created": "2024-05-07T17:27:45.832Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "8c1e4d91-0bd0-48d3-9e5f-e11bf5567407",
+            "name": "HOME_TABLE(mannually)",
+            "containerId": "3dd1297e-473e-4cdc-b487-d1de0c18d7ef",
+            "created": "2024-05-07T18:30:54.107Z",
+            "sortNum": 40000
+        },
+        {
+            "_id": "f16b1792-2ff0-4c6c-8f04-3b3d35ec2b1b",
+            "name": "PARTY_TABLE(overall)",
+            "containerId": "",
+            "created": "2024-05-07T18:37:54.493Z",
+            "sortNum": 60000
+        },
+        {
+            "_id": "70df892d-b975-4363-b0d0-2ccf30caf775",
+            "name": "PARTY_TABLE(mannually)",
+            "containerId": "f16b1792-2ff0-4c6c-8f04-3b3d35ec2b1b",
+            "created": "2024-05-07T18:45:53.801Z",
+            "sortNum": 80000
+        },
+        {
+            "_id": "764230a6-3c28-4c56-a6b3-3c7ade85ef04",
+            "name": "VOTE_CASTING_TABLE(ovell)",
+            "containerId": "",
+            "created": "2024-05-07T18:52:19.598Z",
+            "sortNum": 90000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "eb24c76e-12b7-4e14-bff1-ba96172d1599",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "3dd1297e-473e-4cdc-b487-d1de0c18d7ef",
+            "name": "http://127.0.0.1:8000/home/",
+            "url": "http://127.0.0.1:8000/home/",
+            "method": "DELETE",
+            "sortNum": 80000,
+            "created": "2024-05-07T18:18:57.749Z",
+            "modified": "2024-05-07T18:21:08.781Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Muhammad Ali Hassan\",\n    \"father_name\": \"Choadry Muhammad Shafi\",\n    \"id_no\": \"29292929\",\n    \"phone_number\": \"('02020202',)\",\n    \"email_adress\": \"arslanshafi@gmail.com\",\n    \"password\": \"12341234\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "0048e036-f39d-4c63-8f20-6c6a191bd270",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "3dd1297e-473e-4cdc-b487-d1de0c18d7ef",
+            "name": "TO USE POST METHOD",
+            "url": "http://127.0.0.1:8000/home/",
+            "method": "POST",
+            "sortNum": 160000,
+            "created": "2024-05-07T18:26:15.519Z",
+            "modified": "2024-05-07T18:26:42.988Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Muhammad Haider \",\n    \"father_name\": \"Choadry Muhammad Shafi\",\n    \"id_no\": \"29292929\",\n    \"phone_number\": \"('02020202',)\",\n    \"email_adress\": \"arslanshafi@gmail.com\",\n    \"password\": \"12341234\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "7b9f5243-464c-46da-b543-b3ab20026add",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "3dd1297e-473e-4cdc-b487-d1de0c18d7ef",
+            "name": "USE OF GET METHOD ",
+            "url": "http://127.0.0.1:8000/home/",
+            "method": "GET",
+            "sortNum": 170000,
+            "created": "2024-05-07T18:28:14.547Z",
+            "modified": "2024-05-07T18:28:34.929Z",
+            "headers": []
+        },
+        {
+            "_id": "98cbe05a-b623-4425-94d7-b0d101a9dd32",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "8c1e4d91-0bd0-48d3-9e5f-e11bf5567407",
+            "name": "GET_THE _DATA",
+            "url": "http://127.0.0.1:8000/home/3/",
+            "method": "GET",
+            "sortNum": 180000,
+            "created": "2024-05-07T18:32:28.164Z",
+            "modified": "2024-05-07T18:32:32.723Z",
+            "headers": []
+        },
+        {
+            "_id": "a41e8444-d902-4d1f-bd57-cb116387bb3f",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "8c1e4d91-0bd0-48d3-9e5f-e11bf5567407",
+            "name": "PATCH_THE_DATA",
+            "url": "http://127.0.0.1:8000/home/3/",
+            "method": "PATCH",
+            "sortNum": 190000,
+            "created": "2024-05-07T18:33:42.052Z",
+            "modified": "2024-05-07T18:34:08.209Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\":\"This name\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "d75d9551-2501-428f-98d1-0144dd0b4314",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "8c1e4d91-0bd0-48d3-9e5f-e11bf5567407",
+            "name": "DELETE_THE_DATA",
+            "url": "http://127.0.0.1:8000/home/5/",
+            "method": "DELETE",
+            "sortNum": 200000,
+            "created": "2024-05-07T18:34:59.273Z",
+            "modified": "2024-05-07T18:35:48.108Z",
+            "headers": []
+        },
+        {
+            "_id": "03f91f97-5324-4d34-becc-ff8c6f7cc3f9",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "70df892d-b975-4363-b0d0-2ccf30caf775",
+            "name": "GET_METHOD",
+            "url": "http://127.0.0.1:8000/party/2/",
+            "method": "GET",
+            "sortNum": 240000,
+            "created": "2024-05-07T18:46:33.368Z",
+            "modified": "2024-05-07T18:47:22.898Z",
+            "headers": []
+        },
+        {
+            "_id": "5d250b41-83df-4912-a20e-85edfcd65fbb",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "70df892d-b975-4363-b0d0-2ccf30caf775",
+            "name": "PUT_METHOD",
+            "url": "http://127.0.0.1:8000/party/2/",
+            "method": "PUT",
+            "sortNum": 250000,
+            "created": "2024-05-07T18:48:29.499Z",
+            "modified": "2024-05-07T18:50:25.047Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\":\"Ali Hassan\",\n  \"father_name\":\"Khan Muhammad \",\n  \"phone_number\":\"03033818304\",\n  \"Adress\":\"334/w.b\",\n  \"Id_no\":\"37703-1991421-4\"\n  \n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "1b9cfc26-a69c-4c88-af30-3365049caf9b",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "70df892d-b975-4363-b0d0-2ccf30caf775",
+            "name": "PATCH_METHOD",
+            "url": "http://127.0.0.1:8000/party/1/",
+            "method": "PATCH",
+            "sortNum": 260000,
+            "created": "2024-05-07T18:50:49.444Z",
+            "modified": "2024-05-07T18:51:28.231Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\":\"This is will change name \"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "eadd1b31-efba-49ee-b447-b396f657b755",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "f16b1792-2ff0-4c6c-8f04-3b3d35ec2b1b",
+            "name": "GET_METHOD",
+            "url": "http://127.0.0.1:8000/party_all/",
+            "method": "GET",
+            "sortNum": 270000,
+            "created": "2024-05-07T18:39:20.190Z",
+            "modified": "2024-05-07T18:44:16.981Z",
+            "headers": []
+        },
+        {
+            "_id": "f49a72a4-d919-4dc7-b0f6-a313a7968da3",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "764230a6-3c28-4c56-a6b3-3c7ade85ef04",
+            "name": "POST_METHOD",
+            "url": "http://127.0.0.1:8000/vote_casting/",
+            "method": "POST",
+            "sortNum": 270000,
+            "created": "2024-05-07T18:52:56.824Z",
+            "modified": "2024-05-07T18:55:03.949Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n \"name\":\"Muhammad Sheraz\",\n \"father_name\":\"Muhammad Saleem\",\n \"phone_number\":\"03033818304\",\n \"password\":\"12341234\",\n \"party\":\"pti\",\n \"id_no\":\"37703-1991421-3\"\n \n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "2b735d2e-b195-4be1-9822-d2564490790c",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "f16b1792-2ff0-4c6c-8f04-3b3d35ec2b1b",
+            "name": "POST_METHOD",
+            "url": "http://127.0.0.1:8000/party_all/",
+            "method": "POST",
+            "sortNum": 280000,
+            "created": "2024-05-07T18:43:27.847Z",
+            "modified": "2024-05-07T18:44:35.483Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Sarfraz\",\n  \"father_name\": \"Muhammad Saleem\",\n  \"phone_number\": \"03033818304\",\n  \"Adress\": \"334w.b\",\n  \"Id_no\": \"37703-1991421-3\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "dc515b5d-a832-48a9-b52d-8a215a3383b7",
+            "colId": "88aefd33-75da-40e8-baad-e6f7f5ed6c5c",
+            "containerId": "764230a6-3c28-4c56-a6b3-3c7ade85ef04",
+            "name": "GET_METHOD",
+            "url": "http://127.0.0.1:8000/vote_casting/",
+            "method": "GET",
+            "sortNum": 280000,
+            "created": "2024-05-07T18:55:15.923Z",
+            "modified": "2024-05-07T18:55:29.765Z",
+            "headers": []
+        }
+    ],
+    "ref": "WLOQePW8YXTRvBljv4vNzJ6ShNTkK0MGbxiOHo8svLN46AHxmp_P5SqnKNsc-ZTYFshk1NJ2_iC9pgxvNDX4IA"
+}

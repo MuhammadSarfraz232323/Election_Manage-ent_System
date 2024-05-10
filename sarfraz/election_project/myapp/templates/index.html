@@ -12,7 +12,7 @@
         .sarfraz ul{
             position: fixed;
             list-style: none;
-            padding-left: 90px;
+            padding-left: 30px;
         }
         .sarfraz ul li:hover{
             list-style: none;
@@ -21,7 +21,7 @@
         }
         .sarfraz ul ul li{
             list-style: none;
-            font-size: 17px;
+            font-size: 14px;
             display: none;
             border: 4px;
         }
@@ -29,11 +29,56 @@
             display: block;
         }
         .sarfraz ul ul li:hover{
-            background: grey;
+            background:  rgba(255, 166, 0, 0.73);
             border-left: 4px solid red;
             border-radius: 4px;
         }
     </style>
+    <style>
+        .head tr {
+            height:30px;
+        }
+        .head tr th  {
+            /* background-color: rgba(255, 166, 0, 0.73); */
+            border-radius: 1px;
+            color: white;
+        }
+
+        .head tr th:hover{
+            background-color: #04695a;
+            border-radius: 10px;
+            color: orange;
+        }
+        .head tr th a{
+            color: white;
+
+        }
+        .head tr th a:hover{
+            background-color: #04695a;
+            color: orange;
+        }
+
+        head tr th ul{
+            /* position: fixed; */
+        }
+        .head tr th ul li{
+            position: relative;
+        }
+        .head tr th ul li{
+            list-style: none;
+            position: sticky;
+        }
+        .head tr th ul ul li{
+            font-size: 13px;
+            display: none;
+        }
+        .head tr th ul li:hover ul li{
+            display: block;
+            position: fixed;
+        }
+
+
+        </style>
 </head>
 <body style='background-color: rgb(0, 90, 72);'>
     <div class='sarfraz'>
@@ -50,11 +95,35 @@
         </div>
         <table width='100%'>
             <tr height='100px'>
-                <th style='background-color: #08352c; border-radius: 40px; font-size:24px; color: cornflowerblue;'>
+                <th style='background-color: #08352c; border-radius: 40px; font-size:24px; color: cornflowerblue;' colspan='7'>
                     Election Management System Of Pakistan 
                 </th>
             </tr>
+            <tr height='10px'></tr>
         </table>
+        <div class='head'>
+            <table  width='100%'>
+                <tr>
+                <th><ul>
+                    <li><a href=''>HOME</a></li>
+                </th>
+                <th><ul><br><br><br><br>
+                    <li><a href=''>LATEST UPDATES</a>
+                        <ul>
+                            <li><a href=''>Election 2024</a></li><br>
+                            <li><a href=''>Press Release</a></li><br>
+                            <li><a href=''>Notifications</a></li><br>
+                            <li><a href=''>Cause List</a></li><br>
+                            <li><a href=''>Order</a></li>
+
+                </th>
+                <th><a href=''>ElECTIONS</a></th>
+                <th><a href=''>FOR VOTERS</a></th>
+                <th><a href=''>FOR POLITICAL PARTIES</a></th>
+                <th><a href=''>DOWNLOADS</a></th>
+            </tr>
+        </table>
+        </div>
         {% include "header.html" %}
 </table>
 </marquee>

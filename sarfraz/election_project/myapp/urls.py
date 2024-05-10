@@ -18,7 +18,14 @@ from myapp.views import(
     check_registration,
     detail,
     double_verification,
-    main_user_create
+    main_user_create,
+    Home_api,
+    party,
+    party_1,
+    vote,
+    home_id,
+    introduction,
+    video_function
     )
 urlpatterns = [
     path('ECP/',homepage),
@@ -42,8 +49,18 @@ urlpatterns = [
     path('login/main_portal/cast_vote/send_detail/',detail),
     path('login/send_detail/',detail),
     path('login_verification/Admin/',voter),
+    path('login_verification/Admin/upload_video/',video_function),
     path('login_verification/Admin/user_create/',main_user_create),
     path('login_verification/Admin/check_registration/',check_registration),
-    path('login_verification/',create_user)
+    path('login_verification/',create_user),
+
+    #These are the urls for the api to test the conduction of data between user and server 
+    path('home/',Home_api),
+    path('home/<int:id>/',home_id),
+    path('party/<int:id>/',party),
+    path('party_all/',party_1),
+    path('vote_casting/',vote),
+    path('intro/',introduction)
+
 ]
  
