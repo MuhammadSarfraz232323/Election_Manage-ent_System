@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.authtoken.views import  obtain_auth_token
 
 from myapp.views import(
     homepage,
@@ -26,7 +27,7 @@ from myapp.views import(
     home_id,
     introduction,
     video_function,
-    general_election
+    general_election,create_user
     )
 urlpatterns = [
     path('ECP/',homepage),
@@ -55,12 +56,14 @@ urlpatterns = [
     path('login_verification/Admin/check_registration/',check_registration),
     path('login_verification/',create_user),
     path('general_election/',general_election),
+    # Api'
+
     path('home/',Home_api),
     path('home/<int:id>/',home_id),
     path('party/<int:id>/',party),
     path('party_all/',party_1),
     path('vote_casting/',vote),
-    path('intro/',introduction)
-
+    path('intro/',introduction),
+    path('authhhh/',obtain_auth_token,name='auth')
 ]
  

@@ -18,7 +18,7 @@ class Main_serializer(serializers.ModelSerializer):
     class Meta:
         model=User 
         fields=[
-            'username','email','first_name','last_name','password'
+            'username','email'
         ]      
 
 class Vote_serializer(serializers.ModelSerializer):
@@ -31,5 +31,5 @@ class Introduction_serializer(serializers.ModelSerializer):
     class Meta:
         model=Election_introduction
         fields=[
-            'party_flag','party_name','party_symbol','candidate_name','image'
-        ]
+            'party_flag','party_name','party_symbol','candidate_name','image',
+        ]  

@@ -71,17 +71,21 @@ def home_id(request,id):
         return Response(my_serializer.data,status=status.HTTP_200_OK)
     elif request.method=="DELETE":
         sarfraz.delete()
-        return Response(status=status.HTTP_200_OK)    
+        return Response(status=status.HTTP_200_OK)   
+
 # -------------------------------------------------------      for party table       
 
 @api_view(['PUT','PATCH','GET'])  
 def party(request,id):
-    sarfraz=Party1.objects.get(pk=id)
+    try:
+        sarfraz=Party1.objects.get(pk=id)  
+    except Party1.DoesNotExist:   
+        return Response(status=status.HTTP_404_NOT_FOUND)       
     if request.method=="PUT":
         my_serializer=Partyserializer(sarfraz,data=request.data)
         if my_serializer.is_valid():
             my_serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(my_serializer.data,status=status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)    
     elif request.method=="PATCH":
@@ -91,10 +95,11 @@ def party(request,id):
         sarfraz.Adress=request.data.get('Adress',sarfraz.Adress)
         sarfraz.Id_no=request.data.get('Id_no',sarfraz.Id_no)
         sarfraz.save()
-        return Response(status=status.HTTP_201_CREATED)
+        my_serializer=Partyserializer(sarfraz)
+        return Response(my_serializer.data,status=status.HTTP_201_CREATED)
     elif request.method=="GET":
         my_serializer=Partyserializer(sarfraz)
-        return Response(my_serializer.data,status=status.HTTP_200_OK)    
+        return Response(my_serializer.data,status=status.HTTP_200_OK)  
 
 @api_view(['GET','POST'])    
 def party_1(request):        
@@ -124,7 +129,19 @@ def vote(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     elif request.method=="GET":
         my_serializer=Vote_serializer(sarfraz,many=True)
-        return Response(my_serializer.data,status=status.HTTP_201_CREATED)        
+        return Response(my_serializer.data,status=status.HTTP_201_CREATED) 
+
+@api_view(['POST','GET'])
+def create_user(request):
+    sarfraz=User.objects.all()
+    if request.method=="POST":
+        my_serializer=Main_serializer(data=request.data)
+        my_serializer.save()
+        return Response(status=status.HTTP_201_CREATED) 
+    elif request.method=="GET":
+        my_serializer=Main_serializer(sarfraz)
+        return Response(myserializer.data,status=status.HTTP_200_OK)    
+
 # Original views functions are here 
 
 import sqlite3
