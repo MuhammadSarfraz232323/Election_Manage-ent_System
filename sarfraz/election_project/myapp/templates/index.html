@@ -30,8 +30,12 @@
         }
         .sarfraz ul ul li:hover{
             background:  rgba(255, 166, 0, 0.73);
-            border-left: 4px solid red;
+            border-left: 2px solid red;
             border-radius: 4px;
+        }
+        .sarfraz ul li ul li a {
+            color:white;
+            text-decoration: none;
         }
     </style>
     <style>
@@ -76,11 +80,12 @@
             display: block;
             position: fixed;
         }
-
-
+        .head tr th a{
+            text-decoration: none;
+        }
         </style>
 </head>
-<body style='background-color: rgb(0, 90, 72);'>
+<body style='background-color: rgb(0, 90, 72); font-style: italic;'>
     <div class='sarfraz'>
     <ul>
         <li>
@@ -115,7 +120,6 @@
                             <li><a href=''>Notifications</a></li><br>
                             <li><a href=''>Cause List</a></li><br>
                             <li><a href=''>Order</a></li>
-
                 </th>
                 <th><a href=''>ElECTIONS</a></th>
                 <th><a href=''>FOR VOTERS</a></th>
@@ -139,6 +143,9 @@
             </th>
             <th style='border-radius: 40px; background-color:#08352c;' colspan='7'>
                 <form method='POST' enctype='multipart/form-data'>
+                    {% for x in messages %}
+                        <p style='color:white;'>{{ x }}</p>
+                    {% endfor %}
                     {% csrf_token %}
                     {{ form.as_p }}
                     <input type='submit' value='Signup' style='background-color: orange; border-radius: 20px;'>

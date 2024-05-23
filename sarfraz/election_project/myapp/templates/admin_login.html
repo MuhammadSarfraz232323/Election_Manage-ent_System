@@ -18,6 +18,9 @@
             </th>
             <th style='border: 2px solid rgb(33, 83, 164); border-radius: 30px; background-color: rgb(139, 148, 17);' height='200px'>
                 <form method='POST' enctype='multipart/form-data'>
+                    {%for x in messages %}
+                        <p style="color:white;">{{ x }}</p>
+                    {% endfor %}
                     {% csrf_token %}
                     {{ form.as_p }}
                     <input type='submit' value=' Login' style='background-color: orange; border-radius: 30px;'>

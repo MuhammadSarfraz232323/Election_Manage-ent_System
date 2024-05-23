@@ -19,7 +19,7 @@
             </th>
             <th style='background-color: rgba(5, 78, 39, 0.547); border-radius: 30px;'>
                 {% for x in messages %}
-                    <p>{{ x }}</p>
+                    <p style="color:white;">{{ x }}</p>
                 {% endfor %}
                 <form method='POST' enctype='multipart/form-data'>
                 {% csrf_token %}

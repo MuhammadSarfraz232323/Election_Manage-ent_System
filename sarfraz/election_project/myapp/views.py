@@ -156,8 +156,14 @@ def empty(a,nn=0):
 
 
 name_list=[]
+father_list=[]
+id_no_list=[]
+phone_number_list=[]
 email_list=[]
-otp_list=[]
+adress_list=[]
+password_list=[]
+otp_list=['sarfraz']
+
 check_variable=["sarfraz"]
 def homepage(request):
     form=Simple()
@@ -167,23 +173,34 @@ def homepage(request):
             empty(name_list)  #We are using the empty function in order to delete all the data from the existing list so that new user comes with new data   
             empty(email_list)
             empty(otp_list)
+            empty(father_list)
+            empty(phone_number_list)
+            empty(password_list)
+            empty(id_no_list)
             # print(form.cleaned_data)
             name=request.POST['name']
+            name_list.append(name)
+            father_name=request.POST['father_name']
+            father_list.append(father_name)
+            phone_number=request.POST['phone_number']
+            phone_number_list.append(phone_number)
             email=request.POST['email_adress']
+            email_list.append(email)
             id_no=request.POST['id_no']
+            id_no_list.append(id_no)
+            password=request.POST['password']
+            password_list.append(password)
             check_list=[]
             query="select* from myapp_home"
             cursor.execute(query)
             variable=cursor.fetchall()
             for i in variable:
-                check_list.append(i[5])
+                check_list.append(i[3])
             if id_no in check_list:
-                return HttpResponse("<h1 align='center'>The user with this ID is already registered here !! Please try to login </h1>")    
+                messages.success(request,"The user with this CNIC is already registered !!")
             else:    
                 otp=random.randint(100000,999999) 
                 otp_list.append(otp)
-                name_list.append(name)
-                email_list.append(email)
                 my_subject="Account verification on ECP"
                 html_message=render_to_string('email.html',{"otp":otp})
                 plain_message=strip_tags(html_message)
@@ -204,7 +221,6 @@ def homepage(request):
                     return HttpResponse("<h1 align='center'>There is some problem please try again</h1>")
                     variable=False    
                 if variable:
-                    Home.objects.create(**form.cleaned_data)
                     messages.success(request,"Account created successfully please Put the OTP you received to Verify your vote ")
                     return redirect('Account_verification/')
                 else: 
@@ -223,6 +239,14 @@ def account_verification(request):
             otp=request.POST['otp_variable']
             if int(otp_list[0])==int(otp):
                 check_variable.insert(0,1)
+                Home.objects.create(
+                    name=name_list[0],
+                    father_name=father_list[0],
+                    phone_number=phone_number_list[0],
+                    id_no=id_no_list[0],
+                    email_adress=email_list[0],
+                    password=password_list[0]
+                )
                 return redirect('main_portal/')
             else:
                 return HttpResponse("<h1 align='center'>Sorry,<br>The OTP provided by you is incorrect.Please  try again </h1>")    
@@ -268,10 +292,10 @@ def simple_login(request):
             connection.commit()
             check_list=[]
             for i in variable:
-                check_list.append(i[0])
-                check_list.append(i[4])
+                check_list.append(i[1])
+                check_list.append(i[3])
                 check_list.append(i[5])
-            print(check_list)    
+                check_list.append(i[6])
             if name in check_list and password in check_list and cnic in check_list:
                 query="select* from myapp_vote_casting "
                 cursor.execute(query)
@@ -331,7 +355,7 @@ def create_user(request):
                 login(request,user)
                 return redirect('Admin/')
             else:
-                return HttpResponse("<h1 align='center'>There is some problem Please try again</h1>")    
+                messages.success(request,"There is some problem in your data !!! Please try again !")
     context={
         "form":form
     }
