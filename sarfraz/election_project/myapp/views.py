@@ -1,6 +1,6 @@
-from django.shortcuts import render,redirect
-from myapp.form import main_user,Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration,My_video
-from django.http import HttpResponse
+from django.shortcuts import render,redirect,reverse
+from myapp.form import Main_user,Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration,My_video
+from django.http import HttpResponse,HttpResponseRedirect
 from election_project import settings
 from django.contrib.auth.models import User
 from myapp.models import Home,Election_introduction,Video,Vote_casting,Party1,Video
@@ -8,12 +8,16 @@ from  django.contrib import messages
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail,EmailMultiAlternatives
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 import random
 from myapp.serializers import Homeserializer,Partyserializer,Main_serializer,Vote_serializer,Introduction_serializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status,serializers,generics
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+from myapp.models import UserProfile
+from django.db import transaction
 
 # we are now creating different apis to test the functionalit of ours models 
 
@@ -31,8 +35,27 @@ def introduction(request):
             return Response(status=status.HTTP_400_bad_request)
     elif request.method=="DELETE":
         sarfraz.delete()
-        return Response(status=status.HTTP_200_OK)            
+        return Response(status=status.HTTP_200_OK)       
 
+
+def my_decorator(a):
+    def new(request,*args,**kwargs):
+        if request.user.is_authenticated:
+            return a(request,*args,**kwargs)
+        else:
+            my_url=reverse('home')
+            return HttpResponseRedirect(my_url)
+    print('You are at the main function !! ')
+    return new
+def my_admin(a):
+    def new(request,*args,**kwargs):
+        if request.user.is_authenticated and request.user.is_staff:
+            return a(request) 
+        else:
+            messages.success(request,"Only staff members are allowed to get the admin entry !! ")
+            my_url=reverse('home')
+            return HttpResponseRedirect(my_url)
+    return new        
 @api_view(['GET','POST','DELETE'])  
 def Home_api(request):
     sarfraz=Home.objects.all()
@@ -73,7 +96,8 @@ def home_id(request,id):
         sarfraz.delete()
         return Response(status=status.HTTP_200_OK)   
 
-# -------------------------------------------------------      for party table       
+# -------------------------------------------------------      for party table        
+
 
 @api_view(['PUT','PATCH','GET'])  
 def party(request,id):
@@ -156,98 +180,47 @@ def empty(a,nn=0):
 
 
 name_list=[]
-father_list=[]
+first_name_list=[]
+last_name_list=[]
 id_no_list=[]
 phone_number_list=[]
 email_list=[]
 adress_list=[]
 password_list=[]
-otp_list=['sarfraz']
-
+otp_list=[]
 check_variable=["sarfraz"]
-def homepage(request):
-    form=Simple()
-    if request.method=="POST":
-        form=Simple(request.POST)
-        if form.is_valid():
-            empty(name_list)  #We are using the empty function in order to delete all the data from the existing list so that new user comes with new data   
-            empty(email_list)
-            empty(otp_list)
-            empty(father_list)
-            empty(phone_number_list)
-            empty(password_list)
-            empty(id_no_list)
-            # print(form.cleaned_data)
-            name=request.POST['name']
-            name_list.append(name)
-            father_name=request.POST['father_name']
-            father_list.append(father_name)
-            phone_number=request.POST['phone_number']
-            phone_number_list.append(phone_number)
-            email=request.POST['email_adress']
-            email_list.append(email)
-            id_no=request.POST['id_no']
-            id_no_list.append(id_no)
-            password=request.POST['password']
-            password_list.append(password)
-            check_list=[]
-            query="select* from myapp_home"
-            cursor.execute(query)
-            variable=cursor.fetchall()
-            for i in variable:
-                check_list.append(i[3])
-            if id_no in check_list:
-                messages.success(request,"The user with this CNIC is already registered !!")
-            else:    
-                otp=random.randint(100000,999999) 
-                otp_list.append(otp)
-                my_subject="Account verification on ECP"
-                html_message=render_to_string('email.html',{"otp":otp})
-                plain_message=strip_tags(html_message)
-                message=EmailMultiAlternatives(
-                body=plain_message,
-                subject=my_subject,
-                from_email=None,
-                to=[
-                    email
-                    ]
-                    )
-                message.attach_alternative(html_message,"text/html")
-                variable=False
-                try:
-                    message.send()
-                    variable=True
-                except:
-                    return HttpResponse("<h1 align='center'>There is some problem please try again</h1>")
-                    variable=False    
-                if variable:
-                    messages.success(request,"Account created successfully please Put the OTP you received to Verify your vote ")
-                    return redirect('Account_verification/')
-                else: 
-                    return HttpResponse("</h align='center'>There is some problem !! Please try again </h1>")    
-        print(form.errors)
-    context={
-        "form":form
-    }        
-    
-    return render(request,"index.html",context)
+
+@transaction.atomic
+def homepage(request): 
+    return render(request,"index.html")
 def account_verification(request):
     form=Account_verification()
     if request.method=="POST":
         form=Account_verification(request.POST)
         if form.is_valid():
             otp=request.POST['otp_variable']
+            print(otp)
             if int(otp_list[0])==int(otp):
                 check_variable.insert(0,1)
-                Home.objects.create(
-                    name=name_list[0],
-                    father_name=father_list[0],
-                    phone_number=phone_number_list[0],
-                    id_no=id_no_list[0],
-                    email_adress=email_list[0],
-                    password=password_list[0]
+                hash_password=make_password(password_list[0])
+                print("home created ")    
+                User.objects.create(
+                    username=name_list[0],
+                    first_name=first_name_list[0],
+                    last_name=last_name_list[0],
+                    email=email_list[0],
+                    password=hash_password
                 )
-                return redirect('main_portal/')
+                print('user created ')
+                UserProfile.objects.create(
+                    phone_number=phone_number_list[0],
+                    cnic=id_no_list[0]
+                    )
+                print('profile created ')    
+                my_url=reverse('user-reverse')
+                return HttpResponseRedirect(my_url)
+                my_url=reverse('home')
+                return HttpResponseRedirect(my_url)
             else:
                 return HttpResponse("<h1 align='center'>Sorry,<br>The OTP provided by you is incorrect.Please  try again </h1>")    
     context={
@@ -283,38 +256,27 @@ def simple_login(request):
     if request.method=="POST":
         form=Login(request.POST)
         if form.is_valid():
-            name=request.POST['name']
-            password=request.POST['password']
+            name=request.POST['username']
+            password1=request.POST['password']
             cnic=request.POST['id_no']
-            query="select* from myapp_home"
-            cursor.execute(query)
-            variable=cursor.fetchall()
-            connection.commit()
-            check_list=[]
-            for i in variable:
-                check_list.append(i[1])
-                check_list.append(i[3])
-                check_list.append(i[5])
-                check_list.append(i[6])
-            if name in check_list and password in check_list and cnic in check_list:
-                query="select* from myapp_vote_casting "
-                cursor.execute(query)
-                variable=cursor.fetchall()
-                second_check=[]
-                for i in variable:
-                    second_check.append(i[5])
-                print(second_check)    
-                if cnic in second_check:
-                    return HttpResponse("<h1 align='center'>The user with this cnic have already casted his vote. Thanks for visiting us !!</h1>")
-                else:    
-                    return redirect('main_portal/')
+            user=authenticate(username=name,password=password1)
+            if user is not None:
+                login(request,user)
+                my_url=reverse('home')
+                return HttpResponseRedirect(my_url)
             else:
-                return HttpResponse("<h1 align='center'>There is some problem in your data provided.Please try again </h1>")    
+                messages.success(request,"There is some problem !! Please try again !! ")    
     context={
         "form":form
     }
     return render(request,"login.html",context) 
+@my_decorator    
+def logout_main(request):
+    logout(request)
+    my_url=reverse('login-verification')
+    return HttpResponseRedirect(my_url)   
 
+@my_admin
 def voter(request):
     form=Voterf()
     if request.method=="POST":
@@ -359,8 +321,10 @@ def create_user(request):
     context={
         "form":form
     }
-    return render(request,"admin_login.html",context)  
-def vote_casting(request):
+    return render(request,"admin_login.html",context) 
+
+def vote_casting(request,id):
+    sarfraz=Election_introduction.objects.get(pk=id)
     form=Casting()
     if request.method=="POST":
         form=Casting(request.POST)
@@ -370,7 +334,7 @@ def vote_casting(request):
             phone_number1=request.POST['phone_number']
             password1=request.POST['password']
             id_no1=request.POST['id_no']
-            party1=request.POST['party']
+            # party1=request.POST['party']
             query="select * from myapp_home"
             cursor.execute(query)
             variable=cursor.fetchall()
@@ -379,22 +343,30 @@ def vote_casting(request):
             for i in variable:
                 my_list.append(i[4])
             if password1 not in my_list:  
-                return HttpResponse("<h1 align='center'>You password does not match </h1>")      
+                messages.sucess(request,"Your password does not match !! ")  
             else:
-                pass
-            try:
-                query=f"insert into {party1} values ('{name1}','{father_name1}','{phone_number1}','{party1}','{password1}','{id_no1}')"
-                cursor.execute(query)
-                connection.commit()
-                Vote_casting.objects.create(**form.cleaned_data)
-                return HttpResponse(f"<h1 align='center'>Dear {name1},<br>You have casted your vote for {party1} </h1>")
-            except:
-                return HttpResponse("<h1 align='center'>Sorry !!There is some problem please try again </h1>")
+                try:
+                    query=f"insert into {sarfraz.party_name} values ('{name1}','{father_name1}','{phone_number1}','{sarfraz.party_name}','{password1}','{id_no1}')"
+                    cursor.execute(query)
+                    connection.commit()
+                    print(sarfraz.party_name)
+                    Vote_casting.objects.create(
+                    name=name1,
+                    father_name=father_name1,
+                    phone_number=phone_number1,
+                    password=password1,
+                    party=sarfraz.party_name,
+                    id_no=id_no1
+                    )
+                    messages.success(request,f"Dear {name} ! You have casted you vote successfully !! ")
+                    my_url=reverse('home')
+                    return HttpResponseRedirect(my_url)
+                except:
+                    messages.success(request,"You have alreaday casted your vote !! ")
     context={
         "form":form
     }        
     return render(request,"vote_casting.html",context)
-
 def watch_video(request):
     obj=Video.objects.all()
     context={
@@ -405,6 +377,7 @@ def watch_video(request):
 def contact_page(request):
     return render(request,'contact.html')    
 
+@my_decorator
 def complete(request):
     obj=Vote_casting.objects.all()
     context={
@@ -452,7 +425,7 @@ def verify_registration(request):
     }            
     return render(request,"verify_registration.html",context)    
 
-
+@my_decorator
 def check_registration(request):
     obj=Home.objects.all()
     context={
@@ -468,11 +441,10 @@ def detail(request):
             query=f"select* from myapp_home where id_no = '{cnic}' "
             cursor.execute(query)
             variable=cursor.fetchone()
-            print(variable[0])
-            print(variable[5])
-            if cnic==variable[5]:
-                my_subject="Data recovery Email "
-                context={
+            if variable is not None:
+                if cnic==variable[5]:
+                    my_subject="Data recovery Email "
+                    context={
                     "name":variable[0],
                     "father_name":variable[1],
                     "phone_number":variable[2],
@@ -480,22 +452,22 @@ def detail(request):
                     "password":variable[4], 
                     'id_no':variable[5]                   
                 }
-                html_message=render_to_string("user_data_email.html",context)
-                plain_message=strip_tags(html_message)
-                message=EmailMultiAlternatives(
-                    body=plain_message,
-                    subject=my_subject,
-                    from_email=None,
-                    to=[
+                    html_message=render_to_string("user_data_email.html",context)
+                    plain_message=strip_tags(html_message)
+                    message=EmailMultiAlternatives(
+                        body=plain_message,
+                        subject=my_subject,
+                        from_email=None,
+                        to=[
                         variable[3]
                         ]
                 )
-                message.attach_alternative(html_message,'text/html')
-                try:
-                    message.send()
-                except:
-                    return HttpResponse("<h1 align='center'>There is some problem !! Please try again </h1>")    
-                return HttpResponse("<h1 align='center'>Email sent successfully.Chaeck your registration data to cast your vote </h1>")
+                    message.attach_alternative(html_message,'text/html')
+                    try:
+                        message.send()
+                        messages.success(request,"Email send successfully to your verified email adress !! ")
+                    except:
+                        messages.success(request,"There is some problem ! Please try again !! ")
             else:
                 return HttpResponse("<h1 align='center'>Sorry,<br>This cnic is not registered Please try with registered CNIC </h1>")
     context={
@@ -506,14 +478,25 @@ def detail(request):
 def double_verification(request):
     return HttpResponse("<h1 align='center'>You are already on the required page </h1>")
 
-
+@login_required(login_url='login-verification')    
+@transaction.atomic
 def main_user_create(request):
     form=main_user()
     if request.method=="POST":
         form=main_user(request.POST)
         if form.is_valid():
-            User.objects.create(**form.cleaned_data)
-            return HttpResponse("<h1 align='center'>A new user created successfully  !!!!!!!</h1>")
+            name=request.POST['username']
+            first_name=request.POST['first_name']
+            last_name=request.POST['last_name']
+            email=request.POST['email']
+            password=request.POST['password']
+            password2=make_password(password)
+            phone_number=request.POST['phone_number']
+            cnic=request.POST['cnic']
+            try:
+                pass
+            except:
+                messages.success(request,"The user with this name already exists !! ")    
         else:
             print(form.errors)
     context={
@@ -521,7 +504,7 @@ def main_user_create(request):
     }            
     return render(request,'main_user.html',context)
 
-
+@my_decorator
 def video_function(request):
     form=My_video()
     if request.method=="POST":
@@ -538,6 +521,73 @@ def video_function(request):
 def general_election(request):
     return render(request,'general_election.html')    
 
+def Voter_instructions(request):
+    return render(request,"for_voter.html")
 
-
-
+def front_page(request):
+    form=Main_user()
+    if request.method=="POST":
+        form=Main_user(request.POST)
+        if form.is_valid():
+            empty(name_list)  #We are using the empty function in order to delete all the data from the existing list so that new user comes with new data   
+            empty(email_list)
+            empty(otp_list)
+            empty(first_name_list)
+            empty(last_name_list)
+            empty(phone_number_list)
+            empty(password_list)
+            empty(id_no_list)
+            # print(form.cleaned_data)
+            name=request.POST['username']
+            name_list.append(name)
+            first_name=request.POST['first_name']
+            first_name_list.append(first_name)
+            last_name=request.POST['last_name']
+            last_name_list.append(last_name)
+            phone_number=request.POST['phone_number']
+            phone_number_list.append(phone_number)
+            email=request.POST['email']
+            email_list.append(email)
+            id_no=request.POST['cnic']
+            id_no_list.append(id_no)
+            password=request.POST['password']
+            password_list.append(password)
+            check_list=[]
+            def check_the_existance(name):
+                return User.objects.filter(username=name).exists()
+            if check_the_existance(name):
+                messages.success(request,"The username is already registered !! ")
+            else:
+                otp=random.randint(100000,999999) 
+                otp_list.append(otp)
+                print(otp_list)
+                my_subject="Account verification on ECP"
+                html_message=render_to_string('email.html',{"otp":otp})
+                plain_message=strip_tags(html_message)
+                message=EmailMultiAlternatives(
+                body=plain_message,
+                subject=my_subject,
+                from_email=None,
+                to=[
+                    email
+                    ]
+                    )
+                message.attach_alternative(html_message,"text/html")
+                variable=False
+                try:
+                    print(otp)
+                    # message.send()
+                    variable=True
+                except:
+                    return HttpResponse("<h1 align='center'>There is some problem please try again</h1>")
+                    variable=False    
+                if variable:
+                    messages.success(request,"Account created successfully please Put the OTP you received to Verify your vote ")
+                    return redirect('Account_verification/')
+                else: 
+                    return HttpResponse("</h align='center'>There is some problem !! Please try again </h1>")    
+        print(form.errors)
+    context={
+        "form":form
+    } 
+    return render(request,"front_page.html",context)

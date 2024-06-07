@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Election Panel Islamia Universty Of Bahawalpur </title>
+</head>
+<body>
+    <table width='100%'>
+        <tr height='100px'>
+            <th colspan='10' style='background-color: #08352c; border-radius: 40px; font-size:24px; color: cornflowerblue;' colspan='7'>
+                Election Management System Islamia Universty Of BahawalPur 
+            </th>
+        </tr>
+        <tr height='80px'>
+            <th colspan='9'>
+                {% for x in messages %}
+                    <p style='color:red;'>{{ x }}</p>
+                {% endfor %}
+            </th>
+        </tr>
+        <tr height='300px'>
+            <th width='130px'>
+            </th>
+            <th style='border-radius: 40px;' colspan='7'>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type='submit' value='Signup' style='background-color: orange; border-radius: 20px;'>
+                </form><br><br><br>
+                Already have an Account <a href='login/' style='color: rgb(111, 113, 12); text-decoration: none;'>Login</a>
+            </th>
+            <th width='130px'>
+            </th>
+        </tr>
+    </table>
+</body>
+</html>

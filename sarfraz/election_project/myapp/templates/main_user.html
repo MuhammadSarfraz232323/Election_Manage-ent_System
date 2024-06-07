@@ -13,6 +13,11 @@
             </th>
         </tr>
         <tr height='100px'>
+            <th colspan='9'>
+                {% for x in messages %}
+                  <p style='color: white;'>{{ x }}</p>
+                {% endfor %}
+            </th>
         </tr>
         <tr>
             <th width='400px'></th>

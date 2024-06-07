@@ -21,7 +21,7 @@
     <div class='menu'>
     <ul>
         <li>
-            <a href='send_detail/'>Request For detail</a> 
+            <a href='send_detail/' style='text-decoration: none;'>Request For detail</a> 
         </li>
     </ul>
     </div>
@@ -33,6 +33,11 @@
             </th>
         </tr>
         <tr height='100px'>
+            <th colspan='4'>
+                {% for x in messages %}
+                  <p style='color: rgb(83, 56, 7);'>{{ x }}</p>
+                {% endfor %}
+            </th>
         </tr>
         <tr>
             <th>

@@ -18,7 +18,13 @@
                 Enter your CNIC number to get the detail 
             </th>
         </tr>
-        <tr height='20px'></tr>
+        <tr height='20px'>
+            <th>
+                {% for x in messages %}
+                  <p style='color: red;'>{{ x }}</p>
+                {% endfor %}
+            </th>
+        </tr>
         <tr>
             <th>
                 <form method='POST' enctype='multipart/form-data'>

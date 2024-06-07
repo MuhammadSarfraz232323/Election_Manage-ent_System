@@ -24,7 +24,7 @@
         </tr>
         <tr>
             {% for x in object %}
-                <th colspan='1'><img src='{{ x.party_flag.url }}' width='100px' height='100px' style='border-radius: 20px;'></th><th colspan='1'>{{x.party_name}}</th> <th colspan='1'><img src='{{ x.party_symbol.url }}' width='100px' height='100px' style='border-radius: 30px;'></th> <th><img src='{{x.image.url}}' width='100px' height='100px' style='border-radius:30px;'></th><th colspan='1'>{{x.candidate_name}}</th> <th colspan='1'><a  href='cast_vote/'>Cast Your Vote </th>
+                <th colspan='1'><img src='{{ x.party_flag.url }}' width='100px' height='100px' style='border-radius: 20px;'></th><th colspan='1'>{{x.party_name}}</th> <th colspan='1'><img src='{{ x.party_symbol.url }}' width='100px' height='100px' style='border-radius: 30px;'></th> <th><img src='{{x.image.url}}' width='100px' height='100px' style='border-radius:30px;'></th><th colspan='1'>{{x.candidate_name}}</th> <th colspan='1'><a  href='cast_vote/{{ x.id }}/' style='text-decoration:none;'> Cast Your Vote </th>
                 </tr>
                 <tr height='100px'></tr>
 

@@ -27,7 +27,7 @@ class Account_verification(forms.Form):
     }))  
 
 class Login(forms.Form):
-    name=forms.CharField(label='',widget=forms.TextInput(attrs={
+    username=forms.CharField(label='',widget=forms.TextInput(attrs={
         "placeholder":"Enter your name "
     }))      
     email_adress=forms.EmailField(label='',widget=forms.EmailInput(attrs={
@@ -80,9 +80,6 @@ class Casting(forms.Form):
     password=forms.CharField(label='',widget=forms.PasswordInput(attrs={
         "placeholder":"Enter your password "
     }))  
-    party=forms.CharField(label='',widget=forms.TextInput(attrs={
-        "placeholder":"Enter the  name of party "
-    }))
     id_no=forms.CharField(label='',widget=forms.TextInput(attrs={
         "placeholder":"Enter your ID no ",
         "pattern":"[0-9]{5}-[0-9]{7}-[0-9]{1}"
@@ -105,18 +102,24 @@ class Request(forms.Form):
     id_no=forms.CharField(label='',widget=forms.TextInput(attrs={
         "placeholder":"Enter your CNIC number "
     }))    
-class main_user(forms.Form):
+class Main_user(forms.Form):
     username=forms.CharField(label='',widget=forms.TextInput(attrs={
-        "placeholder":"Enter your name "
+        "placeholder":"Enter your username  "
     }))    
-    email=forms.EmailField(label='',widget=forms.EmailInput(attrs={
-        "placeholder":"Enter your Email Adress"    
-    }))
     first_name=forms.CharField(label='',widget=forms.TextInput(attrs={
         "placeholder":"Enter your first name "
     }))
     last_name=forms.CharField(label='',widget=forms.TextInput(attrs={
         "placeholder":"Enter your last name "
+    }))
+    phone_number=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your phone number "
+    }))
+    email=forms.EmailField(label='',widget=forms.EmailInput(attrs={
+        "placeholder":"Enter your Email Adress"    
+    }))
+    cnic=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your CNIC "
     }))
     password=forms.CharField(label='',widget=forms.PasswordInput(attrs={
         "placeholder":"Enter your password "

@@ -91,7 +91,7 @@
               <ul>
                   <li><a href='contact/'>Contact us</a></li>
                     <li><a href='watch_video/'>Watch a video</a></li>
-                        <li><a href='login_verification/'>Admin Panel </a></li>
+                        <li><a href='Admin/'>Admin Panel </a></li>
                     </ul>
                 </li>
             </ul>
@@ -99,10 +99,16 @@
         <table width='100%'>
             <tr height='100px'>
                 <th style='background-color: #08352c; border-radius: 40px; font-size:24px; color: cornflowerblue;' colspan='7'>
-                    Election Management System Of Pakistan 
+                    Election Management System Islamia Universty Of BahawalPur 
                 </th>
             </tr>
-            <tr height='10px'></tr>
+            <tr height='10px'>
+                <th>
+                    {% for x in messages %}
+                    <p style='color:red; font-size: 20px;'>{{ x }}</p>                      
+                    {% endfor %}
+                </th>
+            </tr>
         </table>
         <div class='head'>
             <table  width='100%'>
@@ -120,8 +126,8 @@
                             <li><a href=''>Order</a></li>
                 </th>
                 <th><a href=''>ElECTIONS</a></th>
-                <th><a href=''>FOR VOTERS</a></th>
-                <th><a href=''>FOR POLITICAL PARTIES</a></th>
+                <th><a href='for_voter/'>FOR VOTERS</a></th>
+                <th><a href=''>FOR CANDIDATES</a></th>
                 <th><a href=''>DOWNLOADS</a></th>
             </tr>
         </table>
@@ -134,23 +140,6 @@
         <tr height='100px'>
             <th style='font-size:18px; color:  cornflowerblue;' colspan='10'>
                 Welcome TO (ECP) Please follow the steps <br> to cast your precious vote 
-            </th>
-        </tr>
-        <tr>
-            <th width='130px'>
-            </th>
-            <th style='border-radius: 40px; background-color:#08352c;' colspan='7'>
-                <form method='POST' enctype='multipart/form-data'>
-                    {% for x in messages %}
-                        <p style='color:white;'>{{ x }}</p>
-                    {% endfor %}
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type='submit' value='Signup' style='background-color: orange; border-radius: 20px;'>
-                </form><br><br><br>
-                Already have an Account <a href='login/' style='color: rgb(111, 113, 12);'>Login</a>
-            </th>
-            <th width='130px'>
             </th>
         </tr>
         <tr height='100px'></tr>
