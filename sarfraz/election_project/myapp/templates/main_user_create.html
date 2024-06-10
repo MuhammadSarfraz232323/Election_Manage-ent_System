@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Admin User</title>
+</head>
+<body>
+    <table width='100%'>
+        <tr height='100px'>
+            <th style='background-color: #08352c; border-radius: 40px; font-size:24px; color: cornflowerblue;' colspan='7'>
+                Election Management System Islamia Universty Of BahawalPur 
+            </th>
+        </tr>
+        <tr height='100px'>
+        </tr>
+        <tr>
+            <th>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type='submit' value='Create ' style='background-color: orange; border-radius: 30px;'>
+
+                </form>
+            </th>
+        </tr>
+        <tr height='170px'>
+            <th>
+                All Rights Are Reserved 
+            </th>
+        </tr>
+
+    </table>
+</body>
+</html>

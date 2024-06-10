@@ -18,7 +18,6 @@ from myapp.views import(
     verify_registration,
     check_registration,
     detail,
-    double_verification,
     main_user_create,
     Home_api,
     party,
@@ -27,7 +26,7 @@ from myapp.views import(
     home_id,
     introduction,Voter_instructions,
     video_function,logout_main,front_page,
-    general_election,create_user
+    general_election,create_user,user_profile
     )
 urlpatterns = [
     path('front_page/',front_page,name='front-page'),
@@ -42,7 +41,7 @@ urlpatterns = [
     path('verify_registration/',verify_registration),
     path('verify_registration/ECP_overview/',ecp_overview),
     path('verify_registration/registration/',registration),
-    path('verify_registration/verify_registration/',double_verification),
+    # path('verify_registration/verify_registration/',double_verification),
     path('registration/',registration),
     path('ECP_overview/',ecp_overview),
     path('front_page/login_verification/Admin/complete_data/',complete),
@@ -63,8 +62,10 @@ urlpatterns = [
     path('Admin/user_create/',main_user_create),
     path('Admin/check_registration/',check_registration),
     path('general_election/',general_election),
+    path('logout/',logout_main),
     path('Admin/logout/',logout_main),
     path('for_voter/',Voter_instructions),
+    path('user_profile/',user_profile),
     # Api 
     path('home/',Home_api),
     path('home/<int:id>/',home_id),

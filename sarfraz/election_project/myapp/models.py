@@ -4,11 +4,12 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 # Create your models here.
 class UserProfile(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    user=models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
     phone_number=models.CharField(max_length=20)
-    cnic=models.CharField(max_length=30,primary_key=True)
-    def __str__(self):
-        return self.username
+    cnic=models.CharField(max_length=30)
+    name=models.CharField(max_length=200,primary_key=True)
+
+    
 @receiver(post_save,sender=User)
 def user_craete_action(sender,instance,created,*args,**kwargs):
     if created:
@@ -25,7 +26,6 @@ class Home(models.Model):
     phone_number=models.CharField(max_length=20)
     email_adress=models.EmailField(max_length=40,null=False)
     password=models.CharField(max_length=40)
-   
 
 class Election_introduction(models.Model):
     party_flag=models.ImageField(upload_to='voter_panel')   

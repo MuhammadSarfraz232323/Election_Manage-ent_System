@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,reverse
-from myapp.form import Main_user,Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration,My_video
+from myapp.form import Super_user,Main_user,Simple,Request,Account_verification,Login,Voterf,Login_user,Casting,Mannual_result,Check_registration,My_video
 from django.http import HttpResponse,HttpResponseRedirect
 from election_project import settings
 from django.contrib.auth.models import User
@@ -36,16 +36,16 @@ def introduction(request):
     elif request.method=="DELETE":
         sarfraz.delete()
         return Response(status=status.HTTP_200_OK)       
-
-
+        
 def my_decorator(a):
     def new(request,*args,**kwargs):
         if request.user.is_authenticated:
             return a(request,*args,**kwargs)
+            print("The user is authenticated ")
         else:
-            my_url=reverse('home')
+            my_url=reverse('front-page')
             return HttpResponseRedirect(my_url)
-    print('You are at the main function !! ')
+    # print('You are at the main function !! ')
     return new
 def my_admin(a):
     def new(request,*args,**kwargs):
@@ -73,7 +73,14 @@ def Home_api(request):
         return Response(my_serializer.data) 
     elif request.method=='DELETE':
         sarfraz.delete()
-        return Response(status=status.HTTP_200_OK)      
+        return Response(status=status.HTTP_200_OK)     
+@api_view(['DELETE'])         
+def user_profile(request):
+    sarfraz=UserProfile.objects.all()
+    if request.method=="DELETE":
+        sarfraz.delete()
+        return Response(status=status.HTTP_200_OK)
+
 
 @api_view(['GET','PATCH','DELETE'])
 def home_id(request,id):
@@ -190,9 +197,10 @@ password_list=[]
 otp_list=[]
 check_variable=["sarfraz"]
 
-@transaction.atomic
+@login_required(login_url='front-page')
 def homepage(request): 
     return render(request,"index.html")
+@transaction.atomic
 def account_verification(request):
     form=Account_verification()
     if request.method=="POST":
@@ -204,21 +212,23 @@ def account_verification(request):
                 check_variable.insert(0,1)
                 hash_password=make_password(password_list[0])
                 print("home created ")    
-                User.objects.create(
+                sarfraz=User.objects.create(
                     username=name_list[0],
                     first_name=first_name_list[0],
                     last_name=last_name_list[0],
                     email=email_list[0],
                     password=hash_password
                 )
+                sarfraz.save()
                 print('user created ')
-                UserProfile.objects.create(
+                print(id_no_list,name_list,phone_number_list)
+                sarfraz1=UserProfile.objects.create(
                     phone_number=phone_number_list[0],
-                    cnic=id_no_list[0]
+                    cnic=id_no_list[0],
+                    name=name_list[0]
                     )
+                sarfraz1.save()
                 print('profile created ')    
-                my_url=reverse('user-reverse')
-                return HttpResponseRedirect(my_url)
                 my_url=reverse('home')
                 return HttpResponseRedirect(my_url)
             else:
@@ -234,7 +244,6 @@ def main_portal(request):
         "object":obj
     }
     return render(request,"mainpage.html",context)
-
 def resend_otp(request):
     if check_variable[0]==1:
         return HttpResponse("<h1 align='center'>Your Account has been verified now you can log in </h1>")
@@ -270,10 +279,11 @@ def simple_login(request):
         "form":form
     }
     return render(request,"login.html",context) 
+
 @my_decorator    
 def logout_main(request):
     logout(request)
-    my_url=reverse('login-verification')
+    my_url=reverse('front-page')
     return HttpResponseRedirect(my_url)   
 
 @my_admin
@@ -303,25 +313,6 @@ def voter(request):
         "form":form
     }            
     return render(request,"voter.html",context)
-
-def create_user(request):
-    form=Login_user()
-    if request.method=="POST":
-        form=Login_user(request.POST)
-        if form.is_valid():
-            name=request.POST['name']
-            password=request.POST['password']
-            user=authenticate(username=name,password=password)
-            if user is not None:
-                print(user)
-                login(request,user)
-                return redirect('Admin/')
-            else:
-                messages.success(request,"There is some problem in your data !!! Please try again !")
-    context={
-        "form":form
-    }
-    return render(request,"admin_login.html",context) 
 
 def vote_casting(request,id):
     sarfraz=Election_introduction.objects.get(pk=id)
@@ -431,72 +422,44 @@ def check_registration(request):
     context={
         "object":obj
     }
-    return render(request,"check_registrations.html",context)    
+    return render(request,"check_registrations.html",context) 
+
 def detail(request):
     form=Request()
     if request.method=="POST":
         form=Request(request.POST)
         if form.is_valid():
-            cnic=request.POST['id_no']
-            query=f"select* from myapp_home where id_no = '{cnic}' "
-            cursor.execute(query)
-            variable=cursor.fetchone()
-            if variable is not None:
-                if cnic==variable[5]:
-                    my_subject="Data recovery Email "
-                    context={
-                    "name":variable[0],
-                    "father_name":variable[1],
-                    "phone_number":variable[2],
-                    "email":variable[3],
-                    "password":variable[4], 
-                    'id_no':variable[5]                   
-                }
-                    html_message=render_to_string("user_data_email.html",context)
-                    plain_message=strip_tags(html_message)
-                    message=EmailMultiAlternatives(
-                        body=plain_message,
+            name=request.POST['username']
+            try:
+                sarfraz=User.objects.get(username=name)
+                sheraz=UserProfile.objects.get(name=name)
+                print(sheraz.cnic)
+                print(sheraz.phone_number)
+                context={
+                "name":sarfraz.username,
+                "first_name":sarfraz.first_name,
+                "phone_number":sheraz.phone_number,
+                "cnic":sheraz.cnic
+            }
+                my_subject="Data Recovery Email "    
+                html_message=render_to_string("user_data_email.html")
+                plain_message=strip_tags(html_message)
+                message=EmailMultiAlternatives(
+                      body=plain_message,
                         subject=my_subject,
                         from_email=None,
                         to=[
-                        variable[3]
+                            sarfraz.email
                         ]
                 )
-                    message.attach_alternative(html_message,'text/html')
-                    try:
-                        message.send()
-                        messages.success(request,"Email send successfully to your verified email adress !! ")
-                    except:
-                        messages.success(request,"There is some problem ! Please try again !! ")
-            else:
-                return HttpResponse("<h1 align='center'>Sorry,<br>This cnic is not registered Please try with registered CNIC </h1>")
-    context={
-        "form":form
-    }        
-    return render(request,'request_for_email.html',context)    
-
-def double_verification(request):
-    return HttpResponse("<h1 align='center'>You are already on the required page </h1>")
-
-@login_required(login_url='login-verification')    
-@transaction.atomic
-def main_user_create(request):
-    form=main_user()
-    if request.method=="POST":
-        form=main_user(request.POST)
-        if form.is_valid():
-            name=request.POST['username']
-            first_name=request.POST['first_name']
-            last_name=request.POST['last_name']
-            email=request.POST['email']
-            password=request.POST['password']
-            password2=make_password(password)
-            phone_number=request.POST['phone_number']
-            cnic=request.POST['cnic']
-            try:
-                pass
+                message.attach_alternative(html_message,'text/html')
+                try:
+                    message.send()
+                    print("Email is sent successfully !! ")
+                except:
+                    messages.success(request,"There is some problem ! Please try again !!! ")    
             except:
-                messages.success(request,"The user with this name already exists !! ")    
+                messages.success(request,"No user with this data is present !! ")        
         else:
             print(form.errors)
     context={
@@ -591,3 +554,30 @@ def front_page(request):
         "form":form
     } 
     return render(request,"front_page.html",context)
+@transaction.atomic
+def main_user_create(request):
+    form=Super_user()    
+    if request.method=="POST":
+        form=Super_user(request.POST)
+        if form.is_valid():
+            username=request.POST['username']
+            first_name=request.POST['first_name']
+            last_name=request.POST['last_name']
+            email=request.POST['email']
+            password=request.POST['password']
+            User.objects.create(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password=password
+            )
+            UserProfile.objects.create(
+                phone_number=phone_number,
+                cnic=cnic,
+                name=username
+            )
+    context={
+        "form":form
+    }        
+    return render(request,'main_user_create.html',context)

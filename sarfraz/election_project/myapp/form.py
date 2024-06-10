@@ -99,8 +99,8 @@ class Check_registration(forms.Form):
     }))
 
 class Request(forms.Form):
-    id_no=forms.CharField(label='',widget=forms.TextInput(attrs={
-        "placeholder":"Enter your CNIC number "
+    username=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your User name  "
     }))    
 class Main_user(forms.Form):
     username=forms.CharField(label='',widget=forms.TextInput(attrs={
@@ -128,3 +128,25 @@ class My_video(forms.Form):
     video=forms.FileField(label='',widget=forms.ClearableFileInput(attrs={
         "class":"form-control"
     }))
+class Super_user(forms.Form):  
+    username=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your username  "
+    }))    
+    first_name=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your first name "
+    }))
+    last_name=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your last name "
+    }))
+    phone_number=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your phone number "
+    }))
+    email=forms.EmailField(label='',widget=forms.EmailInput(attrs={
+        "placeholder":"Enter your Email Adress"    
+    }))
+    cnic=forms.CharField(label='',widget=forms.TextInput(attrs={
+        "placeholder":"Enter your CNIC "
+    }))
+    password=forms.CharField(label='',widget=forms.PasswordInput(attrs={
+        "placeholder":"Enter your password "
+    }))    
