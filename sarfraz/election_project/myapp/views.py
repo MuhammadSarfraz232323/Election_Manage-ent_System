@@ -23,7 +23,7 @@ from django.db import transaction
 
 
 # ----------------------------------------------------  for home table 
-@api_view(['post','DELETE'])
+@api_view(['post','DELETE','GET'])
 def introduction(request):
     sarfraz=Election_introduction.objects.all()
     if request.method=="POST":
@@ -35,7 +35,11 @@ def introduction(request):
             return Response(status=status.HTTP_400_bad_request)
     elif request.method=="DELETE":
         sarfraz.delete()
-        return Response(status=status.HTTP_200_OK)       
+        return Response(status=status.HTTP_200_OK) 
+    elif request.method=="GET":
+        my_serializer=Introduction_serializer(sarfraz,many=True)
+        return Response(my_serializer.data,status=status.HTTP_200_OK)
+
         
 def my_decorator(a):
     def new(request,*args,**kwargs):
@@ -148,7 +152,7 @@ def party_1(request):
             return Response(status=status.HTTP_400_BAD_REQUEST) 
 
 #for vote casting 
-@api_view(['POST','GET'])
+@api_view(['POST','GET','DELETE'])
 def vote(request):
     sarfraz=Vote_casting.objects.all()
     if request.method=="POST":
@@ -161,8 +165,11 @@ def vote(request):
     elif request.method=="GET":
         my_serializer=Vote_serializer(sarfraz,many=True)
         return Response(my_serializer.data,status=status.HTTP_201_CREATED) 
+    elif request.method=="DELETE":
+        sarfraz.delete()
+        return Response(status=status.HTTP_200_OK)    
 
-@api_view(['POST','GET'])
+@api_view(['POST','GET','DELETE'])
 def create_user(request):
     sarfraz=User.objects.all()
     if request.method=="POST":
@@ -171,13 +178,16 @@ def create_user(request):
         return Response(status=status.HTTP_201_CREATED) 
     elif request.method=="GET":
         my_serializer=Main_serializer(sarfraz)
-        return Response(myserializer.data,status=status.HTTP_200_OK)    
+        return Response(myserializer.data,status=status.HTTP_200_OK) 
+    elif request.method=="DELETE":
+        sarfraz.delete()
+        return Response(status=status.HTTP_200_OK)       
 
 # Original views functions are here 
 
 import sqlite3
 connection=sqlite3.connect('db.sqlite3',check_same_thread=False)
-cursor=connection.cursor()  
+cursor=connection.cursor()
 
 def empty(a,nn=0):
     for i in a:
@@ -220,8 +230,6 @@ def account_verification(request):
                     password=hash_password
                 )
                 sarfraz.save()
-                print('user created ')
-                print(id_no_list,name_list,phone_number_list)
                 sarfraz1=UserProfile.objects.create(
                     phone_number=phone_number_list[0],
                     cnic=id_no_list[0],
@@ -229,6 +237,7 @@ def account_verification(request):
                     )
                 sarfraz1.save()
                 print('profile created ')    
+                messages.success(request,"The Account created successfully ! You can now login !!!")
                 my_url=reverse('home')
                 return HttpResponseRedirect(my_url)
             else:
@@ -304,9 +313,9 @@ def voter(request):
                 id_no varchar(100))"""
                 cursor.execute(query)
                 connection.commit()
-                return HttpResponse("<h1 align='center'>A new party has been organized to election panel successfully </h1>")
+                messages.success(request,"A new electiuon has been organized to the election panel ")
             except:
-                return HttpResponse("<h1 align='center'>There is some problem please try again </h1>")
+                messages.success(request,"There is some problem !!Please try again !!")
         else:
             print(form.errors)
     context={
@@ -326,34 +335,30 @@ def vote_casting(request,id):
             password1=request.POST['password']
             id_no1=request.POST['id_no']
             # party1=request.POST['party']
-            query="select * from myapp_home"
-            cursor.execute(query)
-            variable=cursor.fetchall()
-            connection.commit()
-            my_list=[]
-            for i in variable:
-                my_list.append(i[4])
-            if password1 not in my_list:  
-                messages.sucess(request,"Your password does not match !! ")  
-            else:
-                try:
-                    query=f"insert into {sarfraz.party_name} values ('{name1}','{father_name1}','{phone_number1}','{sarfraz.party_name}','{password1}','{id_no1}')"
-                    cursor.execute(query)
-                    connection.commit()
-                    print(sarfraz.party_name)
-                    Vote_casting.objects.create(
-                    name=name1,
-                    father_name=father_name1,
-                    phone_number=phone_number1,
-                    password=password1,
-                    party=sarfraz.party_name,
-                    id_no=id_no1
-                    )
-                    messages.success(request,f"Dear {name} ! You have casted you vote successfully !! ")
-                    my_url=reverse('home')
-                    return HttpResponseRedirect(my_url)
-                except:
-                    messages.success(request,"You have alreaday casted your vote !! ")
+            if User.objects.filter(username=name1).exists():
+                print("sarfraz")
+                if Vote_casting.objects.filter(id_no=id_no1).exists():
+                    messages.success(request,"This user have already casted his vote !! ")
+                else:    
+                    try:
+                        query=f"insert into {sarfraz.party_name} values ('{name1}','{father_name1}','{phone_number1}','{sarfraz.party_name}','{password1}','{id_no1}')"
+                        cursor.execute(query)
+                        connection.commit()
+                        print(sarfraz.party_name)
+                        Vote_casting.objects.create(
+                        name=name1,
+                        father_name=father_name1,
+                        phone_number=phone_number1,
+                        password=password1,
+                        party=sarfraz.party_name,
+                        id_no=id_no1
+                        )
+                        Vote_casting.objects.create(**form.cleaned_data)
+                        messages.success(request,f"Dear {name} ! You have casted you vote successfully !! ")
+                        my_url=reverse('home')
+                        return HttpResponseRedirect(my_url)
+                    except:
+                        messages.success(request,"You have alreaday casted your vote !! ")
     context={
         "form":form
     }        
@@ -432,22 +437,21 @@ def detail(request):
             name=request.POST['username']
             try:
                 sarfraz=User.objects.get(username=name)
-                sheraz=UserProfile.objects.get(name=name)
-                print(sheraz.cnic)
-                print(sheraz.phone_number)
+                print(sarfraz.username)
+                print(sarfraz.password)
                 context={
                 "name":sarfraz.username,
                 "first_name":sarfraz.first_name,
-                "phone_number":sheraz.phone_number,
-                "cnic":sheraz.cnic
-            }
+                "last_name":sarfraz.last_name,
+                'password':sarfraz.password
+                }
                 my_subject="Data Recovery Email "    
-                html_message=render_to_string("user_data_email.html")
+                html_message=render_to_string("user_data_email.html",context)
                 plain_message=strip_tags(html_message)
                 message=EmailMultiAlternatives(
-                      body=plain_message,
-                        subject=my_subject,
-                        from_email=None,
+                  body=plain_message,
+                    subject=my_subject,
+                    from_email=None,
                         to=[
                             sarfraz.email
                         ]
@@ -467,6 +471,47 @@ def detail(request):
     }            
     return render(request,'main_user.html',context)
 
+def detail(request,id):
+    form=Request()
+    if request.method=="POST":
+        form=Request(request.POST)
+        if form.is_valid():
+            name=request.POST['username']
+            try:
+                sarfraz=User.objects.get(pk=id)
+                print(sarfraz.username)
+                print(sarfraz.password)
+                context={
+                "name":sarfraz.username,
+                "first_name":sarfraz.first_name,
+                "last_name":sarfraz.last_name,
+                'password':sarfraz.password
+                }
+                my_subject="Data Recovery Email "    
+                html_message=render_to_string("user_data_email.html",context)
+                plain_message=strip_tags(html_message)
+                message=EmailMultiAlternatives(
+                  body=plain_message,
+                    subject=my_subject,
+                    from_email=None,
+                        to=[
+                            sarfraz.email
+                        ]
+                )
+                message.attach_alternative(html_message,'text/html')
+                try:
+                    message.send()
+                    print("Email is sent successfully !! ")
+                except:
+                    messages.success(request,"There is some problem ! Please try again !!! ")    
+            except:
+                messages.success(request,"No user with this data is present !! ")        
+        else:
+            print(form.errors)
+    context={
+        "form":form
+    }            
+    return render(request,'main_user.html',context)    
 @my_decorator
 def video_function(request):
     form=My_video()
@@ -474,9 +519,9 @@ def video_function(request):
         form=My_video(request.POST,request.FILES)
         if form.is_valid():
             Video.objects.create(**form.cleaned_data)
-            return HttpResponse("<h1 align='center'>Your video is uploaded successfully </h1>")
+            messages.success(request,"Video uploaded successfully !! ")
         else:
-            return HttpResponse("<h1 align='center'>Failed to upload your video</h>")    
+            messages.success(irequest,"There is some problem !Please try again !! ")
     context={
         "form":form
     }        

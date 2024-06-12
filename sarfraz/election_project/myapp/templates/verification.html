@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Verification By OTP </title>
 </head>
-<body style='background-color: rgb(15, 137, 88);'>
+<body>
     <table width='100%'>
         <tr style='height: 100px;'>
-            <th style='font-size: 20px; border-radius: 40px; background-color: green; ' colspan='4'>
+            <th style='font-size: 20px; border-radius: 40px; background-color: #08352c; ' colspan='4'>
                 Verify Your Account By OTP
             </th>
         </tr>
@@ -24,7 +24,7 @@
                 <form method='POST' enctype='multipart/form-data'>
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type='submit' value='Activate Your Account' style='background-color: rgb(80, 142, 0); border-radius: 30px;'>
+                <input type='submit' value='Activate Your Account' style=' border-radius: 30px;'>
                 </form>
             </th>
             <th width='130px'>
